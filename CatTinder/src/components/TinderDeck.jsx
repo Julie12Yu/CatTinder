@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, RefObject} from 'react'
+import React, { useState, useMemo, useRef } from 'react'
 import TinderCard from 'react-tinder-card'
 
 const db = [
@@ -24,22 +24,13 @@ const db = [
   }
 ]
 
-interface TinderChild {
-  name: string;
-  imageURL: string;
-  age: bigint;
-  distance: bigint;
-  description: string;
-}
-
-
 function TinderDeck () {
   const [currentIndex, setCurrentIndex] = useState(db.length - 1)
-  const [lastDirection, setLastDirection] = useState<string>();
+  const [lastDirection, setLastDirection] = useState()
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex)
 
-  const childRefs: RefObject<TinderCard>[] = useMemo(
+  const childRefs = useMemo(
     () =>
       Array(db.length)
         .fill(0)
@@ -47,7 +38,7 @@ function TinderDeck () {
     []
   )
 
-  const updateCurrentIndex = (val : number) => {
+  const updateCurrentIndex = (val) => {
     setCurrentIndex(val)
     currentIndexRef.current = val
   }
@@ -57,12 +48,12 @@ function TinderDeck () {
   const canSwipe = currentIndex >= 0
 
   // set last direction and decrease current index
-  const swiped = (direction: string, nameToDelete: string, index: number) => {
-    setLastDirection(direction);
-    updateCurrentIndex(index - 1);
-  };
+  const swiped = (direction, nameToDelete, index) => {
+    setLastDirection(direction)
+    updateCurrentIndex(index - 1)
+  }
 
-  const outOfFrame = (name: string, idx: number) => {
+  const outOfFrame = (name, idx) => {
     console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current)
     // handle the case in which go back is pressed before card goes outOfFrame
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard()
@@ -71,11 +62,11 @@ function TinderDeck () {
     // during latest swipes. Only the last outOfFrame event should be considered valid
   }
 
-  const swipe = async (dir: string) => {
+  const swipe = async (dir) => {
     if (canSwipe && currentIndex < db.length) {
-      await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
+      await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
     }
-  };
+  }
 
   // increase current index and show card
   const goBack = async () => {
@@ -132,4 +123,4 @@ function TinderDeck () {
   )
 }
 
-export default TinderDeck;
+export default TinderDeck
