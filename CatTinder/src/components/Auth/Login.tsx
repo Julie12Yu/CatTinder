@@ -44,7 +44,7 @@ const Login: React.FC<LoginProps> = ({ onLogin, onLoginS }) => {
 
     return (
         <div>
-            <button onClick={onLoginS}> Sign up if you don't have an account! </button>
+            <button onClick={onLoginS}> Sign up </button>
             <Container maxWidth="sm">
                 <Box sx={{ mt: 4, mb: 4 }}>
                     <Typography variant="h4" component="h1" gutterBottom>

@@ -44,7 +44,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, onSignUpL}) => {
 
     return (
         <div>
-            <button onClick={onSignUpL}> Log in if you have an account! </button>
+            <button onClick={onSignUpL}> Log In</button>
         <Container maxWidth="sm">
             <Box sx={{ mt: 4, mb: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom>
