@@ -1,3 +1,4 @@
+import getOrganizationData from './getOrganizationData.js';
 const rescueGroupsAPIURL = "https://api.rescuegroups.org/v5";
 
 export async function searchPetsWithFilters(props) {
@@ -73,18 +74,24 @@ export async function searchPetsWithFilters(props) {
         return [];
     }
 
-    return data.data.map((cat) => ({
-      id: cat.id,
-      name: cat.attributes.name || "Unknown",
-      age: cat.attributes.age || "Unknown",
-      sex: cat.attributes.sex || "Unknown",
-      imageUrl: cat.attributes.pictureThumbnailUrl || defaultMissingCatPictureURL,
-      breedString: cat.attributes.breedPrimary || "Unknown",
-      summary: cat.attributes.descriptionText || "No description.",
-      distance: cat.attributes.distance || undefined,
-      isDeclawed: cat.attributes.isDeclawed || undefined,
-      isHouseTrained: cat.attributes.isHouseTrained || undefined
+    const cats = await Promise.all(data.data.map(async (cat) => {
+      const org = await getOrganizationData(cat.relationships.orgs.data[0].id);
+      return {
+        id: cat.id,
+        name: cat.attributes.name || "Unknown",
+        age: cat.attributes.age || "Unknown",
+        sex: cat.attributes.sex || "Unknown",
+        imageUrl: cat.attributes.pictureThumbnailUrl || defaultMissingCatPictureURL,
+        breedString: cat.attributes.breedPrimary || "Unknown",
+        summary: cat.attributes.descriptionText || "No description.",
+        distance: cat.attributes.distance || undefined,
+        isDeclawed: cat.attributes.isDeclawed || undefined,
+        isHouseTrained: cat.attributes.isHouseTrained || undefined,
+        org: org,
+        //location : await getLocationData(cat.relationships.locations.data[0].id)
+      };
     }));
+    return cats;
   } catch (error) {
     console.error('Error loading cats:', error);
     return undefined;

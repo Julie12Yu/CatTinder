@@ -6,6 +6,7 @@ import UserAuth from './components/Auth/UserAuth';
 import CatPreference from './models/CatPreference';
 import TinderPage from './components/Tinder/TinderPage';
 import SignUp from './components/Auth/SignUp';
+import searchPetsWithFilters from './api/SearchPetsWithFilters';
 import { User } from 'firebase/auth';
 
 const App: React.FC = () => {

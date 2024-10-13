@@ -1,3 +1,5 @@
+import OrgInfo from "./OrgInfo";
+
 interface CatInfo {
     id ?: string | undefined;
     name ?: string | undefined;
@@ -9,32 +11,6 @@ interface CatInfo {
     distance ?: number | undefined;
     isDeclawed ?: boolean | undefined;
     isHouseTrained ?: boolean | undefined;
+    org: OrgInfo | null | undefined;
 }
 export default CatInfo;
-
-/*
-{
-  "data": [{
-    "type": "animals",
-    "id": "8013243",
-    "attributes": {
-      "name": "Curly",
-      "ageGroup": "Young",
-      "birthDate": "2016-03-30T00:00:00Z"
-    },
-    "relationships": {
-      "breeds": {
-        "data": [{
-            "type": "breeds",
-            "id": "35"
-          },
-          {
-            "type": "breeds",
-            "id": "62"
-          }
-        ]
-      }
-    }
-  }]
-}
-*/
