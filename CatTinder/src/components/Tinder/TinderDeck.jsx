@@ -2,8 +2,8 @@ import React, { useState, useMemo, useRef, useEffect } from "react";
 import CatProfile from "../CatProfile";
 import TinderCard from "react-tinder-card";
 import searchPets from "../../api/SearchPets";
+import CircularProgress from "@mui/material/CircularProgress";
 import searchPetsWithFilters from "../../api/SearchPetsWithFilters";
-import CircularProgress from '@mui/material/CircularProgress';
 import { API_URL } from "../Auth/config";
 import { auth } from "../Auth/firebase";
 
@@ -59,7 +59,6 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
           console.log(cats.length + ", index bef: " + currentIndex);
           await setCurrentIndex(cats.length - 1);
           console.log(cats.length + ", index aft: " + currentIndex);
-          
         } else {
           throw new Error("No data returned");
         }
@@ -126,7 +125,14 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
     <div>
       <h1>Cat Tinder</h1>
       {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
           <CircularProgress />
         </div>
       ) : (
@@ -143,6 +149,7 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
                 <div
                   style={{ backgroundImage: "url(" + character.imageUrl + ")" }}
                   className="card"
+                  onClick={() => handleCardClick(character)} // Add click event here
                 >
                   <h3>{character.name}</h3>
                 </div>
@@ -174,6 +181,11 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
               ? "Please swipe"
               : "You swiped " + lastDirection}
           </h2>
+          <CatProfile
+            cat={selectedCat}
+            isOpen={!!selectedCat}
+            onClose={handleCloseProfile}
+          />
         </>
       )}
     </div>
