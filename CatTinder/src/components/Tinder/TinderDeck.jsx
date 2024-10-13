@@ -104,6 +104,7 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive, view
     setLastDirection(direction);
     handleCloseProfile();
     updateCurrentIndex(index - 1);
+    handleSwipe(direction, cats[index + 1]);
   };
 
   const outOfFrame = (name, idx) => {
