@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
+import CatProfile from "../CatProfile";
 import TinderCard from "react-tinder-card";
-import searchPets from "../../api/SearchPets";
 import searchPetsWithFilters from "../../api/SearchPetsWithFilters";
 import { API_URL } from "../Auth/config";
 import { auth } from "../Auth/firebase";
@@ -11,7 +11,7 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
   const [lastDirection, setLastDirection] = useState("none");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  // used for outOfFrame closure
+  const [selectedCat, setSelectedCat] = useState(null);
   const currentIndexRef = useRef(currentIndex);
 
   const handleSwipe = async (direction, catId) => {
@@ -84,25 +84,16 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
   };
 
   const canGoBack = currentIndex < cats.length - 1;
-
   const canSwipe = currentIndex >= 0;
 
-  // set last direction and decrease current index
   const swiped = (direction, nameToDelete, index) => {
     setLastDirection(direction);
     updateCurrentIndex(index - 1);
-    /*if (index - 1 < 0 && !loading) {
-      setPage((prevPage) => prevPage + 1);
-    }*/
   };
 
   const outOfFrame = (name, idx) => {
     console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
-    // handle the case in which go back is pressed before card goes outOfFrame
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
-    // TODO: when quickly swipe and restore multiple times the same card,
-    // it happens multiple outOfFrame events are queued and the card disappear
-    // during latest swipes. Only the last outOfFrame event should be considered valid
   };
 
   const swipe = async (dir) => {
@@ -112,7 +103,6 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
     }
   };
 
-  // increase current index and show card
   const goBack = async () => {
     if (!canGoBack) return;
     const newIndex = currentIndex + 1;
@@ -120,16 +110,16 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
     await childRefs[newIndex].current.restoreCard();
   };
 
+  const handleCardClick = (cat) => {
+    setSelectedCat(cat);
+  };
+
+  const handleCloseProfile = () => {
+    setSelectedCat(null);
+  };
+
   return (
     <div>
-      <link
-        href="https://fonts.googleapis.com/css?family=Damion&display=swap"
-        rel="stylesheet"
-      />
-      <link
-        href="https://fonts.googleapis.com/css?family=Alatsi&display=swap"
-        rel="stylesheet"
-      />
       <h1>Cat Tinder</h1>
       <div className="cardContainer">
         {cats.map((character, index) => (
@@ -141,8 +131,9 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
             onCardLeftScreen={() => outOfFrame(character.name, index)}
           >
             <div
-              style={{ backgroundImage: "url(" + character.imageUrl + ")" }}
+              style={{ backgroundImage: `url(${character.imageUrl})` }}
               className="card"
+              onClick={() => handleCardClick(character)}
             >
               <h3>{character.name}</h3>
             </div>
@@ -169,11 +160,16 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
           Swipe right!
         </button>
       </div>
-      <h2 key={lastDirection} className="infoText">
+      <h2 className="infoText">
         {lastDirection === "none"
           ? "Please swipe"
-          : "You swiped " + lastDirection}
+          : `You swiped ${lastDirection}`}
       </h2>
+      <CatProfile
+        cat={selectedCat}
+        isOpen={!!selectedCat}
+        onClose={handleCloseProfile}
+      />
     </div>
   );
 }
