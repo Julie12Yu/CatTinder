@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import CatPreference from '../models/CatPreference';
 import catOptions from '../data/catOptions.json';
 import { Container, TextField, MenuItem, Button, Typography, Box, InputAdornment, ThemeProvider, createTheme, FormControl, FormHelperText } from '@mui/material';
-import { Pets, ColorLens, Wc, Straighten, PinDrop } from '@mui/icons-material';
+import { Pets, Wc, Straighten, PinDrop } from '@mui/icons-material';
+import Alert from '@mui/material/Alert';
 
 const theme = createTheme({
     palette: {
@@ -13,9 +14,11 @@ const theme = createTheme({
 interface UserProfileProps {
     onSavePreferences: (preferences: CatPreference) => void;
     preferences ?: CatPreference;
+    failedToRetreive ?: boolean;
 }
 
 const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
+    const [failedToRetreive, setFailedToRetreive] = useState(props.failedToRetreive);
     const [preferences, setPreferences] = useState<CatPreference>(
         props.preferences || {
             sex: '',
@@ -31,6 +34,7 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
+        setFailedToRetreive(false);
         setPreferences({
             ...preferences,
             [name]: value,
@@ -43,6 +47,7 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
             ...preferences,
             [name as string]: value as string,
         });
+        setFailedToRetreive(false);
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -66,6 +71,11 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
 
     return (
         <ThemeProvider theme={theme}>
+            {failedToRetreive && (
+                <Alert severity="warning">
+                No cats found for the given preferences. Please adjust your preferences.
+                </Alert>
+            )}
             <Container maxWidth="sm">
                 <Box sx={{ mt: 4, mb: 4 }}>
                     <Typography variant="h4" component="h1" gutterBottom>
