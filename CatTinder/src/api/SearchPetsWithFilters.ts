@@ -91,9 +91,8 @@ async function searchPetsWithFilters(props: SearchPetsProps): Promise<CatInfo[] 
       age: cat.attributes.age || "Unknown",
       sex: cat.attributes.sex || "Unknown",
       imageUrl: cat.attributes.pictureThumbnailUrl || defaultMissingCatPictureURL,
-      breedString: cat.attributes.breedString || "Unknown",
-      color: cat.attributes.color || "Unknown",
-      summary: cat.attributes.description || "No description.",
+      breedString: cat.attributes.breedPrimary || "Unknown",
+      summary: cat.attributes.descriptionText || "No description.",
       distance: cat.attributes.distance || undefined,
       isDeclawed: cat.attributes.isDeclawed || undefined,
       isHouseTrained: cat.attributes.isHouseTrained || undefined
