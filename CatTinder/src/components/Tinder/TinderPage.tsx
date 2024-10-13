@@ -9,12 +9,13 @@ interface TinderProfileProps {
   setAuthUser: (user: User | null) => void;
   preferences: CatPreference;
   failedToRetreive:  () => void;
+  viewMatches: () => void;
 }
 const TinderPage: React.FC<TinderProfileProps> = (props: TinderProfileProps) => {
   return (
     <div>
       <div className="app">
-        <TinderDeck authUser={props.authUser} setAuthUser={props.setAuthUser} preferences={props.preferences} failedToRetreive={props.failedToRetreive}/>
+        <TinderDeck authUser={props.authUser} setAuthUser={props.setAuthUser} preferences={props.preferences} failedToRetreive={props.failedToRetreive} viewMatches={props.viewMatches}/>
       </div>
     </div>
   );

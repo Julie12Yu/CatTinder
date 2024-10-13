@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import CatProfile from "../CatProfile";
 import TinderCard from "react-tinder-card";
-import searchPets from "../../api/SearchPets";
+import {searchPets} from "../../api/SearchPets";
 import CircularProgress from "@mui/material/CircularProgress";
 import searchPetsWithFilters from "../../api/SearchPetsWithFilters";
 import { API_URL } from "../Auth/config";
@@ -11,7 +11,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import InfoIcon from '@mui/icons-material/Info';
 
-function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
+function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive, viewMatches }) {
   const [cats, setCats] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [lastDirection, setLastDirection] = useState("none");
@@ -21,20 +21,24 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
   const currentIndexRef = useRef(currentIndex);
   const [currentCat, setCurrentCat] = useState(null);
 
-  const handleSwipe = async (direction, catId) => {
+  const handleSwipe = async (direction, catInfo) => {
+    if (direction !== "right") {
+    
+      return;
+    }
     console.log("SWIPING NOW");
     try {
       if (!authUser || !authUser.uid) {
         throw new Error("authUser or uid is not defined");
       }
       const userNum = authUser.uid;
-      const response = await fetch(`${API_URL}/api/swipe`, {
+      const response = await fetch(`${API_URL}api/swipe`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           // Include authentication headers if required
         },
-        body: JSON.stringify({ userNum, catId, direction }),
+        body: JSON.stringify({ userNum, catInfo}),
       });
       if (!response.ok) {
         throw new Error("Failed to record swipe");
@@ -88,6 +92,7 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
 
   const updateCurrentIndex = (val) => {
     setCurrentIndex(val);
+    handleCloseProfile();
     currentIndexRef.current = val;
   };
 
@@ -97,17 +102,19 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
 
   const swiped = (direction, nameToDelete, index) => {
     setLastDirection(direction);
+    handleCloseProfile();
     updateCurrentIndex(index - 1);
   };
 
   const outOfFrame = (name, idx) => {
     console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
+    handleCloseProfile();
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
   };
 
   const swipe = async (dir) => {
     if (canSwipe && currentIndex < cats.length) {
-      handleSwipe(dir, cats[currentIndex].id);
+      handleSwipe(dir, cats[currentIndex]);
       handleCloseProfile();
       await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
     }
@@ -175,25 +182,33 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
           ))}
           </div>
           <div className="buttons">
-          <IconButton
-            style={{ backgroundColor: !canSwipe && "#c3c4d3" }}
-            onClick={() => swipe("left")}
-          >
-            <FavoriteBorderIcon />
-          </IconButton>
-          <IconButton
-            style={{ backgroundColor: !canGoBack && "#c3c4d3" }}
-            onClick={() => goBack()}
-          >
-            Undo
-          </IconButton>
-          <IconButton
-            style={{ backgroundColor: !canSwipe && "#c3c4d3" }}
-            onClick={() => swipe("right")}
-          >
-            <FavoriteIcon />
-          </IconButton>
-        </div>
+            <IconButton
+              style={{ backgroundColor: !canSwipe && "#c3c4d3" }}
+              onClick={() => swipe("left")}
+            >
+              <FavoriteBorderIcon />
+            </IconButton>
+            <IconButton
+              style={{ backgroundColor: !canGoBack && "#c3c4d3" }}
+              onClick={() => goBack()}
+            >
+              Undo
+            </IconButton>
+            <IconButton
+              style={{ backgroundColor: !canSwipe && "#c3c4d3" }}
+              onClick={() => swipe("right")}
+            >
+              <FavoriteIcon />
+            </IconButton>
+          </div>
+          <div className="buttons">
+            <IconButton
+              onClick={() => viewMatches()}
+            >
+              View Matches
+            </IconButton>
+          </div>
+
           <h2 key={lastDirection} className="infoText">
             {lastDirection === "none"
               ? "Please swipe"

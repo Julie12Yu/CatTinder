@@ -14,7 +14,6 @@ app.use(cors());
 app.use(express.json());
 
 // Import the routes
-app.use('/api/swipe', swipeRoutes);
 
 // MongoDB connection
 const uri = process.env.MONGO_ATLAS_URI;

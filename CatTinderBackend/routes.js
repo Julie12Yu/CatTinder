@@ -1,10 +1,11 @@
 import express from 'express';
-import  swipe  from './routes/swipe.js'; 
+import  {swipe, getSwipes}  from './routes/swipe.js'; 
 import  searchPetsWithFilters  from './routes/searchPetsWithFilters.js';
 
 const router = express.Router();
 
 router.post('/swipe', swipe);
+router.get('/swipes', getSwipes);
 router.post('/searchPetsWithFilters', async (req, res) => {
   const props = req.body;
   try {

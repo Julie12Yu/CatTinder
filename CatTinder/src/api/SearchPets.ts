@@ -1,8 +1,7 @@
 import axios from 'axios';
 import CatInfo from '../models/CatInfo';
 import CatPreference from '../models/CatPreference';
-
-const API_URL = 'http://localhost:8273/api';
+import { API_URL } from '../components/Auth/config.ts';
 
 interface SearchPetsProps {
   preferences: CatPreference;
@@ -11,6 +10,31 @@ interface SearchPetsProps {
 }
 
 
+export async function searchPets(props: SearchPetsProps) : Promise<CatInfo[] | undefined> {
+  try {
+    const response = await axios.post(`${API_URL}api/searchPetsWithFilters`, {preferences: props.preferences, page: props.page, limit: props.limit})
+    return response.data;
+  } catch (error) {
+    console.error('Error searching pets with filters:', error);
+    throw error;
+  }
+};
+//OdtmJK6pdtOU9sCfgGFs2B2hWcn1
+
+export const getMatches = async (userNum: string, limit:number) => {
+  try {
+    const response = await axios.get(`${API_URL}api/swipes/?userNum=${userNum}&limit=${limit}`);
+    console.log("Data:" + JSON.stringify(response.data))
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching matches:`, error);
+    throw error;
+  }
+};
+
+export default {searchPets, getMatches}
+
+/*
 export default async function searchPets(props: SearchPetsProps) : Promise<CatInfo[] | undefined> {
   try {
     const response = await axios.post(`${API_URL}/searchPetsWithFilters`, {preferences: props.preferences, page: props.page, limit: props.limit})
@@ -20,6 +44,7 @@ export default async function searchPets(props: SearchPetsProps) : Promise<CatIn
     throw error;
   }
 };
+*/
 
 /*
 
