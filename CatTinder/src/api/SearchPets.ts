@@ -12,7 +12,7 @@ interface SearchPetsProps {
 
 export async function searchPets(props: SearchPetsProps) : Promise<CatInfo[] | undefined> {
   try {
-    const response = await axios.post(`${API_URL}/api/searchPetsWithFilters/`, {preferences: props.preferences, page: props.page, limit: props.limit})
+    const response = await axios.post(`https://cat-tinder-backend.vercel.app/api/searchPetsWithFilters/`, {preferences: props.preferences, page: props.page, limit: props.limit})
     return response.data;
   } catch (error) {
     console.error('Error searching pets with filters:', error);
