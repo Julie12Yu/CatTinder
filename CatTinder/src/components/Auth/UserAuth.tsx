@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { auth } from './firebase.js';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 
-const UserAuth: React.FC = () => {
+interface UserAuthProps {
+    returnToPreferences: () => void;
+    displayReturnToPreferences: boolean;    
+}
+
+const UserAuth: React.FC<UserAuthProps> = (props: UserAuthProps) => {
     const [authUser, setAuthUser] = useState<User | null>(null);
 
     useEffect(() => {
@@ -31,7 +36,13 @@ const UserAuth: React.FC = () => {
 
     return (
         <div>
-            {authUser ? <><p>{`Signed In as ${authUser.email}`}</p><button onClick={userSignOut}>Sign Out</button></> : <p>Welcome!</p>}
+            {authUser 
+                ? <>
+                    <p>{`Signed In as ${authUser.email}`}</p>
+                    <button onClick={userSignOut}>Sign Out</button>
+                    {props.displayReturnToPreferences && <button onClick={props.returnToPreferences}>Return to Preferences</button>}
+                  </> 
+                : <p>Welcome!</p>}
         </div>
     );
 }

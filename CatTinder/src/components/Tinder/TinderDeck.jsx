@@ -3,7 +3,8 @@ import TinderCard from "react-tinder-card";
 import searchPets from "../../api/SearchPets";
 import searchPetsWithFilters from "../../api/SearchPetsWithFilters";
 
-function TinderDeck({ preferences }) {
+
+function TinderDeck({ preferences, failedToRetreive }) {
   const [cats, setCats] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [lastDirection, setLastDirection] = useState("none");
@@ -21,6 +22,9 @@ function TinderDeck({ preferences }) {
         const data = await searchPets({ preferences, page, limit: 50});
         //console.log(JSON.stringify(data));
         if (data) {
+          if (data.length == 0) {
+            failedToRetreive();
+          }
           //console.log("CATS CATS CATS BEFORE" + cats);
           await setCats(data);
           

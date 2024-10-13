@@ -13,7 +13,7 @@ interface SearchPetsProps {
 
 export default async function searchPets(props: SearchPetsProps) : Promise<CatInfo[] | undefined> {
   try {
-    const response = await axios.post(`${API_URL}/searchPetsWithFilters`, {preferences: props.preferences, page: props.page, limit: props.limit});
+    const response = await axios.post(`${API_URL}/searchPetsWithFilters`, {preferences: props.preferences, page: props.page, limit: props.limit})
     return response.data;
   } catch (error) {
     console.error('Error searching pets with filters:', error);
