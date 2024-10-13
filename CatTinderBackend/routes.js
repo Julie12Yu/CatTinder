@@ -1,19 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const Swipe = require('./models/Swipe'); // Assuming you have a models directory with Swipe model
+const SwipeModel = require('./models/SwipeModel'); 
+const { swipe } = require('./routes/swipe.js');
+const { searchPetsWithFilters } = require('./routes/searchPetsWithFilters.ts');
 
-// Define a route for swiping
-router.post('/swipe', async (req, res) => {
-  const { userId, catId, direction } = req.body;
-  const newSwipe = new Swipe({ userId, catId, direction });
-  try {
-    await newSwipe.save();
-    res.status(201).json(newSwipe);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+router.post('/swipe', swipe);
+router.post('/searchPetsWithFilters', async (req, res) => {
+    const props = req.body;
+    try {
+      const cats = await searchPetsWithFilters(props);
+      res.status(200).json(cats);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
 
-// You can define more routes here
 
 module.exports = router;

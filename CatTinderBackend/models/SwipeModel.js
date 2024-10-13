@@ -7,6 +7,6 @@ const swipeSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now }
 });
 
-const Swipe = mongoose.model('Swipe', swipeSchema);
+const SwipeModel = mongoose.model('Swipe', swipeSchema);
 
-module.exports = Swipe;
+module.exports = SwipeModel;
