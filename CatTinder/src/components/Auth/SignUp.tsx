@@ -74,9 +74,8 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, onSignUpL}) => {
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 <Button
                     variant="contained"
-                    color="primary"
                     fullWidth
-                    sx={{ mt: 2 }}
+                    sx={{ mt: 2 , backgroundColor: '#726589'}}
                     onClick={handleSignUp}
                 >
                     SignUp

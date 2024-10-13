@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {signInWithEmailAndPassword} from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { Button, Container, TextField, Box, Typography } from '@mui/material';
 
@@ -8,24 +8,42 @@ interface LoginProps {
     onLoginS: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onLogin, onLoginS}) => {
+const Login: React.FC<LoginProps> = ({ onLogin, onLoginS }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const handleLogin = () => {
-        // Perform login logic here
         console.log(`Username: ${username}, Password: ${password}`);
         signInWithEmailAndPassword(auth, username, password)
-        .then((useCredential) => {
-            console.log('User logged in successfully:', useCredential);
-        }).catch((error) => {
+        .then((userCredential) => {
+            console.log('User logged in successfully:', userCredential);
+            onLogin();
+        })
+        .catch((error) => {
             console.error('Error logging in:', error);
+            const errorMessage = getErrorMessage(error.code);
+            setError(errorMessage);
         });
-        onLogin();
+    };
+
+    const getErrorMessage = (errorCode: string) => {
+        switch (errorCode) {
+            case 'auth/invalid-email':
+                return 'The email address is not valid.';
+            case 'auth/user-disabled':
+                return 'The user account has been disabled by an administrator.';
+            case 'auth/user-not-found':
+                return 'There is no user record corresponding to this email.';
+            case 'auth/wrong-password':
+                return 'The password is incorrect.';
+            default:
+                return 'An unknown error occurred.';
+        }
     };
 
     return (
-        <div>        
+        <div>
             <button onClick={onLoginS}> Sign up if you don't have an account! </button>
             <Container maxWidth="sm">
                 <Box sx={{ mt: 4, mb: 4 }}>
@@ -49,11 +67,11 @@ const Login: React.FC<LoginProps> = ({ onLogin, onLoginS}) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
                     <Button
                         variant="contained"
-                        color="primary"
                         fullWidth
-                        sx={{ mt: 2 }}
+                        sx={{ mt: 2, backgroundColor: '#726589' }}
                         onClick={handleLogin}
                     >
                         Login
