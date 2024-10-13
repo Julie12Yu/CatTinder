@@ -1,5 +1,3 @@
-
-
 const rescueGroupsAPIURL = "https://api.rescuegroups.org/v5";
 
 export async function searchPetsWithFilters(props) {
