@@ -8,7 +8,6 @@ import TinderPage from './components/Tinder/TinderPage';
 import SignUp from './components/Auth/SignUp';
 //import searchPetsWithFilters from './api/SearchPetsWithFilters';
 import { User } from 'firebase/auth';
-import { getMatches } from './api/SearchPets';
 import ViewMatches from './components/Tinder/ViewMatches';
 
 const App: React.FC = () => {

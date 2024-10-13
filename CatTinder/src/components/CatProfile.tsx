@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 interface CatProfileProps {
-  cat: CatInfo;
+  cat: CatInfo | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -38,7 +38,9 @@ const CatProfile: React.FC<CatProfileProps> = ({ cat, isOpen, onClose }) => {
         <Typography variant="body1">Age: {cat.age}</Typography>
         <Typography variant="body1">Sex: {cat.sex}</Typography>
         <Typography variant="body1">Breed: {cat.breedString}</Typography>
-        <Typography variant="body1">{he.decode(cat.summary)}</Typography>
+        {
+          cat.summary && <Typography variant="body1">{he.decode(cat.summary)}</Typography>
+        }
         {cat.org ? (
           <>
             <Typography variant="h6" gutterBottom>Organization Info</Typography>

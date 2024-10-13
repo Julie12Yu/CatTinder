@@ -169,7 +169,7 @@ const ViewMatches: React.FC<ViewMatchesProps> = (props: ViewMatchesProps) => {
             ))}
           </Grid>
           <CatProfile
-            cat={selectedCat ? selectedCat.catInfo : {}}
+            cat={selectedCat ? selectedCat.catInfo : null}
             isOpen={!!selectedCat}
             onClose={handleCloseProfile}
           />
