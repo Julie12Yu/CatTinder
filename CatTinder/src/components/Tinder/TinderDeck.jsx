@@ -32,7 +32,7 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive, view
         throw new Error("authUser or uid is not defined");
       }
       const userNum = authUser.uid;
-      const response = await fetch(`${API_URL}/api/swipe`, {
+      const response = await fetch(`${API_URL}/api/swipe/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
