@@ -16,7 +16,7 @@ interface CatProfileProps {
 }
 
 const CatProfile: React.FC<CatProfileProps> = ({ cat, isOpen, onClose }) => {
-  if (!isOpen) {
+  if (!isOpen || !cat) {
     return null;
   }
   let googleMapsLink = ""
