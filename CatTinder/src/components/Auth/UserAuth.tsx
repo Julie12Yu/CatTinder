@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import firebase from 'firebase/compat/app';
 import { auth } from './firebase';
-import { onAuthStateChanged, signOut }from 'firebase/auth';
+import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 
 const UserAuth: React.FC = () => {
+    const [authUser, setAuthUser] = useState<User | null>(null);
 
-    const [authUser, setAuthUser] = useState<firebase.User | null>(null);
-    
     useEffect(() => {
-        const listen = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setAuthUser(user);
                 console.log('User is signed in');
             } else {
-                setAuthUser(null)
+                setAuthUser(null);
             }
         });
-        return () => {listen();}
+
+        // Cleanup function
+        return () => {
+            unsubscribe();
+        };
     }, []);
 
     const userSignOut = () => {
