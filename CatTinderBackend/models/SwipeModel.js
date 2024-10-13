@@ -1,12 +1,13 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const swipeSchema = new mongoose.Schema({
   userId: String,
+  userNum: String,
   catId: String,
   direction: String, // 'left' or 'right'
   timestamp: { type: Date, default: Date.now }
 });
 
-const Swipe = mongoose.model('Swipe', swipeSchema);
+const SwipeModel = mongoose.model('Swipe', swipeSchema);
 
-module.exports = Swipe;
+export default SwipeModel;

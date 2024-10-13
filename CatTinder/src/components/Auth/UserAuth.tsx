@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { auth } from './firebase';
+import React, { useEffect} from 'react';
+import { auth } from './firebase.js';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 
-const UserAuth: React.FC = () => {
-    const [authUser, setAuthUser] = useState<User | null>(null);
+interface UserAuthProps {
+    authUser: User | null;
+    setAuthUser: (user: User | null) => void;
+    returnToPreferences: () => void;
+    displayReturnToPreferences: boolean;    
+}
+
+const UserAuth: React.FC<UserAuthProps> = (props: UserAuthProps) => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setAuthUser(user);
+                props.setAuthUser(user);
                 console.log('User is signed in');
             } else {
-                setAuthUser(null);
+                props.setAuthUser(null);
             }
         });
 
@@ -31,7 +37,13 @@ const UserAuth: React.FC = () => {
 
     return (
         <div>
-            {authUser ? <><p>{`Signed In as ${authUser.email}`}</p><button onClick={userSignOut}>Sign Out</button></> : <p>Welcome!</p>}
+            {props.authUser 
+                ? <>
+                    <p>{`Signed In as ${props.authUser.email}`}</p>
+                    <button onClick={userSignOut}>Sign Out</button>
+                    {props.displayReturnToPreferences && <button onClick={props.returnToPreferences}>Return to Preferences</button>}
+                  </> 
+                : <p>Welcome!</p>}
         </div>
     );
 }

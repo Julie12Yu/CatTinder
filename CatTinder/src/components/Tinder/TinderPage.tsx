@@ -1,20 +1,20 @@
 import './TinderPage.css';
-import React, { useState } from 'react';
 import TinderDeck from './TinderDeck'; // Assuming you have this component
-import searchPetsWithFilters from '../../api/SearchPetsWithFilters';
 import CatPreference from '../../models/CatPreference';
+import { User } from 'firebase/auth';
 
 
 interface TinderProfileProps {
+  authUser: User | null;
+  setAuthUser: (user: User | null) => void;
   preferences: CatPreference;
+  failedToRetreive:  () => void;
 }
 const TinderPage: React.FC<TinderProfileProps> = (props: TinderProfileProps) => {
-  const [petData, setPetData] = useState({ name: "", img: "", id: "" });
-
   return (
     <div>
       <div className="app">
-        <TinderDeck preferences={props.preferences}/>
+        <TinderDeck authUser={props.authUser} setAuthUser={props.setAuthUser} preferences={props.preferences} failedToRetreive={props.failedToRetreive}/>
       </div>
     </div>
   );

@@ -1,16 +1,7 @@
-import CatPreference from "../models/CatPreference";
-import CatInfo from "../models/CatInfo";
-
 const rescueGroupsAPIURL = "https://api.rescuegroups.org/v5";
 
-interface SearchPetsProps {
-  preferences: CatPreference;
-  page?: number;
-  limit?: number;
-}
-
-async function searchPetsWithFilters(props: SearchPetsProps): Promise<CatInfo[] | undefined> {
-  const addFilter = (filters: unknown[], fieldName: string, operation: string, criteria: unknown) => {
+export async function searchPetsWithFilters(props) {
+  const addFilter = (filters, fieldName, operation, criteria) => {
     filters.push({
       fieldName: "animals." + fieldName,
       operation: operation,
@@ -18,7 +9,7 @@ async function searchPetsWithFilters(props: SearchPetsProps): Promise<CatInfo[] 
     });
   }
 
-  const constructFilterProcessing = (filters: unknown[]) => {
+  const constructFilterProcessing = (filters) => {
     if (filters.length <= 1) {
         return "";
     }
@@ -32,15 +23,13 @@ async function searchPetsWithFilters(props: SearchPetsProps): Promise<CatInfo[] 
   const preferences = props.preferences;
   const defaultMissingCatPictureURL = "https://cdn.discordapp.com/attachments/786109228267601920/1294837546911535134/a8117bbcdb409915a733bec10b3ad118.png?ex=670c76f0&is=670b2570&hm=da91d1ff4fb5c18909eb5078c9ce34f1ded7f961d344b7c7ab85486e8e7d1d58&";
 
-  const filters: unknown[] = []
+  const filters = []
 
   if (preferences.sex !== undefined && preferences.sex !== "Any") {
-    //console.log("Gender:" + preferences.sex);
     addFilter(filters, "sex", "equals", preferences.sex)
   } 
 
   if (preferences.ageGroup !== undefined && preferences.ageGroup !== "Any") {
-    //console.log("Age:" + preferences.ageLowerBound) + "-" + preferences.ageUpperBound;
     addFilter(filters, "ageGroup", "equals", preferences.ageGroup)
   } 
 
@@ -68,7 +57,7 @@ async function searchPetsWithFilters(props: SearchPetsProps): Promise<CatInfo[] 
       method: "POST",
       headers: {
         "Content-Type": "application/vnd.api+json",
-        "Authorization": "" + import.meta.env.VITE_RESCUE_GROUPS_API_KEY
+        "Authorization": "" + process.env.RESCUE_GROUPS_API_KEY
       },
       body: JSON.stringify(requestBody)
     });
@@ -80,12 +69,11 @@ async function searchPetsWithFilters(props: SearchPetsProps): Promise<CatInfo[] 
     const data = await response.json();
     console.log('Response Data:', data);
 
-    // Assuming the response data structure contains an array of cats
     if (!data || !data.data || data.data.length === 0) { 
         return [];
     }
 
-    return data.data.map((cat: any) => ({
+    return data.data.map((cat) => ({
       id: cat.id,
       name: cat.attributes.name || "Unknown",
       age: cat.attributes.age || "Unknown",

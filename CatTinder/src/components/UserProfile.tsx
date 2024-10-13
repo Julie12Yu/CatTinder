@@ -12,12 +12,12 @@ const theme = createTheme({
 
 interface UserProfileProps {
     onSavePreferences: (preferences: CatPreference) => void;
-    currentPreferences?: CatPreference;
+    preferences ?: CatPreference;
 }
 
 const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
     const [preferences, setPreferences] = useState<CatPreference>(
-        props.currentPreferences || {
+        props.preferences || {
             sex: '',
             breed: '',
             color: '',
