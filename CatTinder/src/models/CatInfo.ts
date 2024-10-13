@@ -3,7 +3,7 @@ interface CatInfo {
     name ?: string | undefined;
     age ?: number | undefined;
     sex ?: string | undefined;
-    img ?: string | undefined;
+    imageUrl ?: string | undefined;
     breedString ?: string | undefined;
     color ?: string | undefined;
     summary ?: string | undefined; 
