@@ -4,7 +4,6 @@ interface CatPreference {
     color ?: string;
     distance ?: number;
     zipCode ?: number;
-    ageLowerBound ?: number;
-    ageUpperBound ?: number;
+    ageGroup ?: string;
 }
 export default CatPreference;

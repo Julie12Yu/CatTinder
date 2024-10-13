@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import CatPreference from '../models/CatPreference';
 import catOptions from '../data/catOptions.json';
 import { Container, TextField, MenuItem, Button, Typography, Box, InputAdornment, ThemeProvider, createTheme, FormControl, FormHelperText } from '@mui/material';
-import { Pets, ColorLens, LocationOn, Wc, Straighten, PinDrop } from '@mui/icons-material';
+import { Pets, ColorLens, Wc, Straighten, PinDrop } from '@mui/icons-material';
 
 const theme = createTheme({
     palette: {
@@ -23,8 +23,7 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
             color: '',
             distance: 50,
             zipCode: undefined,
-            ageLowerBound: undefined,
-            ageUpperBound: undefined,
+            ageGroup: ''
         }
     );
 
@@ -50,10 +49,9 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
         e.preventDefault();
         const newErrors: Partial<Record<keyof CatPreference, string>> = {};
 
-        if (!preferences.ageLowerBound) newErrors.ageLowerBound = 'Age lower bound is required';
-        if (!preferences.ageUpperBound) newErrors.ageUpperBound = 'Age upper bound is required';
+        if (!preferences.ageGroup) newErrors.ageGroup = 'Age group is required';
         if (!preferences.breed) newErrors.breed = 'Preferred breed is required';
-        if (!preferences.color) newErrors.color = 'Preferred color is required';
+        //if (!preferences.color) newErrors.color = 'Preferred color is required';
         if (!preferences.sex) newErrors.sex = 'Preferred gender is required';
         if (!preferences.distance) newErrors.distance = 'Preferred distance is required';
         if (!preferences.zipCode) newErrors.zipCode = 'Zip code is required';
@@ -74,17 +72,16 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
                         User Profile
                     </Typography>
                     <form onSubmit={handleSubmit}>
-                        <Box sx={{ mb: 2 }}>
-                            <FormControl fullWidth error={!!errors.ageLowerBound}>
+                    <Box sx={{ mb: 2 }}>
+                            <FormControl fullWidth error={!!errors.ageGroup}>
                                 <TextField
                                     fullWidth
-                                    label="Age Lower Bound"
-                                    type="number"
-                                    id="ageLowerBound"
-                                    name="ageLowerBound"
-                                    value={preferences.ageLowerBound || ''}
-                                    placeholder="Enter an age (e.g. 0)"
-                                    onChange={handleInputChange}
+                                    select
+                                    label="Age Group"
+                                    id="ageGroup"
+                                    name="ageGroup"
+                                    value={preferences.ageGroup || ''}
+                                    onChange={handleSelectChange}
                                     variant="outlined"
                                     margin="normal"
                                     InputProps={{
@@ -94,32 +91,15 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
                                             </InputAdornment>
                                         ),
                                     }}
-                                />
-                                {errors.ageLowerBound && <FormHelperText>{errors.ageLowerBound}</FormHelperText>}
-                            </FormControl>
-                        </Box>
-                        <Box sx={{ mb: 2 }}>
-                            <FormControl fullWidth error={!!errors.ageUpperBound}>
-                                <TextField
-                                    fullWidth
-                                    label="Age Upper Bound"
-                                    type="number"
-                                    id="ageUpperBound"
-                                    name="ageUpperBound"
-                                    value={preferences.ageUpperBound || ''}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter an age (e.g. 10)"
-                                    variant="outlined"
-                                    margin="normal"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <Pets />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                                {errors.ageUpperBound && <FormHelperText>{errors.ageUpperBound}</FormHelperText>}
+                                >
+                                    <MenuItem value="Any">Any</MenuItem>
+                                    {catOptions.ageGroup.map((ageGroup) => (
+                                        <MenuItem key={ageGroup} value={ageGroup}>
+                                            {ageGroup}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                                {errors.ageGroup && <FormHelperText>{errors.ageGroup}</FormHelperText>}
                             </FormControl>
                         </Box>
                         <Box sx={{ mb: 2 }}>
@@ -152,6 +132,7 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
                                 {errors.breed && <FormHelperText>{errors.breed}</FormHelperText>}
                             </FormControl>
                         </Box>
+                        {/*
                         <Box sx={{ mb: 2 }}>
                             <FormControl fullWidth error={!!errors.color}>
                                 <TextField
@@ -182,6 +163,7 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
                                 {errors.color && <FormHelperText>{errors.color}</FormHelperText>}
                             </FormControl>
                         </Box>
+                        */}
                         <Box sx={{ mb: 2 }}>
                             <FormControl fullWidth error={!!errors.sex}>
                                 <TextField
@@ -203,8 +185,8 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
                                     }}
                                 >
                                     <MenuItem value="Any">Any</MenuItem>
-                                    <MenuItem value="male">Male</MenuItem>
-                                    <MenuItem value="female">Female</MenuItem>
+                                    <MenuItem value="Male">Male</MenuItem>
+                                    <MenuItem value="Female">Female</MenuItem>
                                 </TextField>
                                 {errors.sex && <FormHelperText>{errors.sex}</FormHelperText>}
                             </FormControl>

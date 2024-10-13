@@ -1,41 +1,52 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import TinderCard from "react-tinder-card";
+import searchPets from "../api/SearchPets";
+import searchPetsWithFilters from "../api/SearchPetsWithFilters";
 
-const db = [
-  {
-    name: "Richard Hendricks",
-    url: "https://cdn.rescuegroups.org/5970/pictures/animals/20946/20946173/99648142.jpg?width=100",
-  },
-  {
-    name: "Erlich Bachman",
-    url: "https://cdn.rescuegroups.org/5970/pictures/animals/20946/20946173/99648142.jpg?width=100",
-  },
-  {
-    name: "Monica Hall",
-    url: "https://cdn.rescuegroups.org/5970/pictures/animals/20946/20946173/99648142.jpg?width=100",
-  },
-  {
-    name: "Jared Dunn",
-    url: "https://cdn.rescuegroups.org/5970/pictures/animals/20946/20946173/99648142.jpg?width=100",
-  },
-  {
-    name: "Dinesh Chugtai",
-    url: "https://cdn.rescuegroups.org/5970/pictures/animals/20946/20946173/99648142.jpg?width=100",
-  },
-];
-
-function TinderDeck() {
-  const [currentIndex, setCurrentIndex] = useState(db.length - 1);
+function TinderDeck({ preferences }) {
+  const [cats, setCats] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(-1);
   const [lastDirection, setLastDirection] = useState("none");
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
+  useEffect(() => {
+    const loadCats = async () => {
+      setLoading(true);
+      try {
+        console.log("SEARCHING NOW")
+        const data = await searchPetsWithFilters({ preferences, page, limit: 10});
+        console.log(JSON.stringify(data));
+        if (data) {
+          console.log("CATS CATS CATS BEFORE" + cats);
+          await setCats(data);
+          
+          console.log("CATS CATS CATS AFTER" + cats);
+          console.log(cats.length + ", index bef: " + currentIndex);
+          await setCurrentIndex(cats.length - 1);
+          console.log(cats.length + ", index aft: " + currentIndex);
+          
+        } else {
+          throw new Error('No data returned');
+        }
+      } catch (error) {
+        console.error('Error loading cats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCats();
+  }, [page, preferences]);
+
   const childRefs = useMemo(
     () =>
-      Array(db.length)
+      Array(cats.length)
         .fill(0)
-        .map((i) => React.createRef()),
-    []
+        .map(() => React.createRef()),
+    [cats.length]
   );
 
   const updateCurrentIndex = (val) => {
@@ -43,7 +54,7 @@ function TinderDeck() {
     currentIndexRef.current = val;
   };
 
-  const canGoBack = currentIndex < db.length - 1;
+  const canGoBack = currentIndex < cats.length - 1;
 
   const canSwipe = currentIndex >= 0;
 
@@ -51,6 +62,9 @@ function TinderDeck() {
   const swiped = (direction, nameToDelete, index) => {
     setLastDirection(direction);
     updateCurrentIndex(index - 1);
+    /*if (index - 1 < 0 && !loading) {
+      setPage((prevPage) => prevPage + 1);
+    }*/
   };
 
   const outOfFrame = (name, idx) => {
@@ -63,7 +77,7 @@ function TinderDeck() {
   };
 
   const swipe = async (dir) => {
-    if (canSwipe && currentIndex < db.length) {
+    if (canSwipe && currentIndex < cats.length) {
       await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
     }
   };
@@ -86,18 +100,18 @@ function TinderDeck() {
         href="https://fonts.googleapis.com/css?family=Alatsi&display=swap"
         rel="stylesheet"
       />
-      <h1>React Tinder Card</h1>
+      <h1>Cat Tinder</h1>
       <div className="cardContainer">
-        {db.map((character, index) => (
+        {cats.map((character, index) => (
           <TinderCard
             ref={childRefs[index]}
             className="swipe"
-            key={character.name}
+            key={character.id}
             onSwipe={(dir) => swiped(dir, character.name, index)}
             onCardLeftScreen={() => outOfFrame(character.name, index)}
           >
             <div
-              style={{ backgroundImage: "url(" + character.url + ")" }}
+              style={{ backgroundImage: "url(" + character.imageUrl + ")" }}
               className="card"
             >
               <h3>{character.name}</h3>
