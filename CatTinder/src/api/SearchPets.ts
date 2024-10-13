@@ -12,7 +12,7 @@ interface SearchPetsProps {
 
 export async function searchPets(props: SearchPetsProps) : Promise<CatInfo[] | undefined> {
   try {
-    const response = await axios.post(`${API_URL}api/searchPetsWithFilters`, {preferences: props.preferences, page: props.page, limit: props.limit})
+    const response = await axios.post(`${API_URL}/api/searchPetsWithFilters`, {preferences: props.preferences, page: props.page, limit: props.limit})
     return response.data;
   } catch (error) {
     console.error('Error searching pets with filters:', error);
@@ -23,7 +23,7 @@ export async function searchPets(props: SearchPetsProps) : Promise<CatInfo[] | u
 
 export const getMatches = async (userNum: string, limit:number) => {
   try {
-    const response = await axios.get(`${API_URL}api/swipes/?userNum=${userNum}&limit=${limit}`);
+    const response = await axios.get(`${API_URL}/api/swipes/?userNum=${userNum}&limit=${limit}`);
     console.log("Data:" + JSON.stringify(response.data))
     return response.data;
   } catch (error) {
