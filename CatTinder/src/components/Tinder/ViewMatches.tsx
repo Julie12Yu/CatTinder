@@ -120,6 +120,9 @@ const ViewMatches: React.FC<ViewMatchesProps> = (props: ViewMatchesProps) => {
     return txt.value;
   };
 
+  const defaultMissingCatPictureURL = "https://cdn.discordapp.com/attachments/786109228267601920/1294837546911535134/a8117bbcdb409915a733bec10b3ad118.png?ex=670c76f0&is=670b2570&hm=da91d1ff4fb5c18909eb5078c9ce34f1ded7f961d344b7c7ab85486e8e7d1d58&";
+  
+
   return (
     <div className={classes.root}>
       <Button
@@ -145,12 +148,12 @@ const ViewMatches: React.FC<ViewMatchesProps> = (props: ViewMatchesProps) => {
         <div>
           <Grid container spacing={3} className={classes.cardContainer}>
             {matches.map((match) => (
-              <Grid item xs={12} sm={6} md={4} key={match._id}>
+              match.catInfo && <Grid item xs={12} sm={6} md={4} key={match._id}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.media}
-                    image={match.catInfo.imageUrl}
-                    title={match.catInfo.name}
+                    image={match.catInfo.imageUrl || defaultMissingCatPictureURL }
+                    title={match.catInfo.name || "Unknown"}
                   />
                   <CardContent>
                     <Typography variant="h5" color="textSecondary" component="p">
