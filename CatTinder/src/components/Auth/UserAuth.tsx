@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import firebase from 'firebase/compat/app';
-import { auth } from '../../firebase';
+import { auth } from './firebase';
 import { onAuthStateChanged, signOut }from 'firebase/auth';
 
 const UserAuth: React.FC = () => {
