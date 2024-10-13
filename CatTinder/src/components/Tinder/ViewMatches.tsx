@@ -14,6 +14,7 @@ import { getMatches } from '../../api/SearchPets';
 import CatProfile from '../CatProfile';
 import CatInfo from '../../models/CatInfo';
 import { API_URL } from '../Auth/config';
+import Upscaler from 'upscaler'; 
 
 const useStyles = makeStyles({
   root: {
@@ -25,12 +26,12 @@ const useStyles = makeStyles({
     margin: 'auto',
     position: 'relative',
     borderRadius: '15px', 
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     border: '1px solid #e0e0e0',
   },
   media: {
     height: 200,
-    borderTopLeftRadius: '15px', 
+    borderTopLeftRadius: '15px',
     borderTopRightRadius: '15px',
   },
   cardContainer: {
@@ -74,6 +75,11 @@ const ViewMatches: React.FC<ViewMatchesProps> = (props: ViewMatchesProps) => {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCat, setSelectedCat] = useState<Match | null>(null);
+  const [upscaledImages, setUpscaledImages] = useState<{ [key: string]: string }>({});
+
+  const upscaler = new Upscaler(); 
+  const defaultMissingCatPictureURL = "https://cdn.discordapp.com/attachments/786109228267601920/1294837546911535134/a8117bbcdb409915a733bec10b3ad118.png?ex=670c76f0&is=670b2570&hm=da91d1ff4fb5c18909eb5078c9ce34f1ded7f961d344b7c7ab85486e8e7d1d58&";
+
 
   const handleCatInfoClick = (match: Match) => {
     if (selectedCat === match) {
@@ -114,14 +120,49 @@ const ViewMatches: React.FC<ViewMatchesProps> = (props: ViewMatchesProps) => {
     fetchMatches();
   }, [props.userNum, props.limit]);
 
+  useEffect(() => {
+    const upscaleImages = async () => {
+      const newUpscaledImages: { [key: string]: string } = {};
+      for (const match of matches) {
+        if (match.catInfo && match.catInfo.imageUrl) {
+          try {
+            const upscaledImage = await retreiveImage(match);
+            newUpscaledImages[match._id] = upscaledImage;
+          } catch (error) {
+            console.error('Error upscaling image:', error);
+            newUpscaledImages[match._id] = match.catInfo.imageUrl;
+          }
+        }
+      }
+      setUpscaledImages(newUpscaledImages);
+    };
+
+    if (matches.length > 0) {
+      upscaleImages();
+    }
+  }, [matches]);
+
   const decodeHtml = (html: string) => {
     const txt = document.createElement('textarea');
     txt.innerHTML = html;
     return txt.value;
   };
 
-  const defaultMissingCatPictureURL = "https://cdn.discordapp.com/attachments/786109228267601920/1294837546911535134/a8117bbcdb409915a733bec10b3ad118.png?ex=670c76f0&is=670b2570&hm=da91d1ff4fb5c18909eb5078c9ce34f1ded7f961d344b7c7ab85486e8e7d1d58&";
-  
+  const retreiveImage = async (match: Match): Promise<string> => {
+    if (match && match.catInfo && match.catInfo.imageUrl) {
+      console.log("Upscaling image: " + match.catInfo.imageUrl);
+      try {
+        const upscaledImage = await upscaler.upscale(match.catInfo.imageUrl);
+        console.log("Successfully upscaled image for cat: " + match.catInfo.name);
+        return upscaledImage;
+      } catch (error) {
+        console.log("Error upscaling. Using default image.");
+        return match.catInfo.imageUrl;
+      }
+    } else {
+      return defaultMissingCatPictureURL;
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -147,13 +188,13 @@ const ViewMatches: React.FC<ViewMatchesProps> = (props: ViewMatchesProps) => {
       ) : (
         <div>
           <Grid container spacing={3} className={classes.cardContainer}>
-            {matches.map((match) => (
-              match.catInfo && <Grid item xs={12} sm={6} md={4} key={match._id}>
+            {matches.map((match) => ( match.catInfo &&
+              <Grid item xs={12} sm={6} md={4} key={match._id}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.media}
-                    image={match.catInfo.imageUrl || defaultMissingCatPictureURL }
-                    title={match.catInfo.name || "Unknown"}
+                    image={upscaledImages[match._id] || match.catInfo.imageUrl || defaultMissingCatPictureURL}
+                    title={match.catInfo.name}
                   />
                   <CardContent>
                     <Typography variant="h5" color="textSecondary" component="p">
