@@ -12,7 +12,6 @@ import { User } from 'firebase/auth';
 const App: React.FC = () => {
     const [page, setPage] = useState<'login' | 'userProfile' | 'main' | 'signUp'>('login');
     const [preferences, setPreferences] = useState<CatPreference>({});
-    const [failed, setFailed] = useState<boolean>(false);
     const [authUser, setAuthUser] = useState<User | null>(null);
 
     const handleLogin = () => {
@@ -43,7 +42,10 @@ const App: React.FC = () => {
 
     const handleFailedToRetrieve = () => {
       setPage('userProfile');
-      setFailed(true)
+    }
+
+    const handleReturnToLogin = () => {
+      setPage('login');
     }
 
     return (
@@ -53,7 +55,7 @@ const App: React.FC = () => {
               {page === 'signUp' && <SignUp onSignUp={handleSignUp} onSignUpL={onSignUpLogin} />}
               {page === 'userProfile' && <UserProfile onSavePreferences={handleSavePreferences} preferences={preferences}/>}
               {page === 'main' && <TinderPage authUser={authUser} setAuthUser={setAuthUser} preferences={preferences} failedToRetreive={handleFailedToRetrieve}/>}
-              <UserAuth  authUser={authUser} setAuthUser={setAuthUser} returnToPreferences={handleReturnToPreferences} displayReturnToPreferences={page === 'main'}/>
+              <UserAuth  authUser={authUser} setAuthUser={setAuthUser} returnToPreferences={handleReturnToPreferences} displayReturnToPreferences={page === 'main'} returnToLogin={handleReturnToLogin}/>
             </div>
         </>
     );

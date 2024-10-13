@@ -6,6 +6,7 @@ interface UserAuthProps {
     authUser: User | null;
     setAuthUser: (user: User | null) => void;
     returnToPreferences: () => void;
+    returnToLogin: () => void;
     displayReturnToPreferences: boolean;    
 }
 
@@ -30,6 +31,7 @@ const UserAuth: React.FC<UserAuthProps> = (props: UserAuthProps) => {
     const userSignOut = () => {
         signOut(auth).then(() => {
             console.log('User signed out');
+            props.returnToLogin();
         }).catch((error) => {
             console.error('Error signing out:', error);
         });
