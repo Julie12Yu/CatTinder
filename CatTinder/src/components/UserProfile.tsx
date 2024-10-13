@@ -247,9 +247,8 @@ const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
                         <Button
                             type="submit"
                             variant="contained"
-                            color="primary"
                             fullWidth
-                            sx={{ borderRadius: '20px' }}
+                            sx={{ backgroundColor: '#726589', borderRadius: '20px' }}
                         >
                             Save Preferences
                         </Button>
