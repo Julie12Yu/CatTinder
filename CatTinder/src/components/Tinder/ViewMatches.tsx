@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -12,6 +13,7 @@ import { makeStyles } from '@mui/styles';
 import { getMatches } from '../../api/SearchPets';
 import CatProfile from '../CatProfile';
 import CatInfo from '../../models/CatInfo';
+import { API_URL } from '../Auth/config';
 
 const useStyles = makeStyles({
   root: {
@@ -22,14 +24,14 @@ const useStyles = makeStyles({
     maxWidth: 345,
     margin: 'auto',
     position: 'relative',
-    borderRadius: '15px', // Rounded edges
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Modern shadow
-    border: '1px solid #e0e0e0', // Light border
+    borderRadius: '15px', 
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+    border: '1px solid #e0e0e0',
   },
   media: {
     height: 200,
-    borderTopLeftRadius: '15px', // Rounded edges for media
-    borderTopRightRadius: '15px', // Rounded edges for media
+    borderTopLeftRadius: '15px', 
+    borderTopRightRadius: '15px',
   },
   cardContainer: {
     display: 'flex',
@@ -83,6 +85,18 @@ const ViewMatches: React.FC<ViewMatchesProps> = (props: ViewMatchesProps) => {
 
   const handleCloseProfile = () => {
     setSelectedCat(null);
+  };
+
+  const handleDeleteMatch = async (matchId: string) => {
+    try {
+      const response = await fetch(`${API_URL}/api/swipes/${matchId}`, {
+        method: 'DELETE',
+      });
+      console.log('Response:', response);
+      setMatches(matches.filter((match) => match._id !== matchId));
+    } catch (error) {
+      console.error('Error deleting match:', error);
+    }
   };
 
   useEffect(() => {
@@ -139,8 +153,8 @@ const ViewMatches: React.FC<ViewMatchesProps> = (props: ViewMatchesProps) => {
                     title={match.catInfo.name}
                   />
                   <CardContent>
-                  <Typography variant="h5" color="textSecondary" component="p">
-                    {match.catInfo.name}
+                    <Typography variant="h5" color="textSecondary" component="p">
+                      {match.catInfo.name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
                       Age: {match.catInfo.age}
@@ -162,6 +176,13 @@ const ViewMatches: React.FC<ViewMatchesProps> = (props: ViewMatchesProps) => {
                       style={{ position: 'absolute', top: 10, right: 10 }}
                     >
                       <InfoIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => handleDeleteMatch(match._id)}
+                      style={{ position: 'absolute', top: 10, left: 10 }}
+                    >
+                      <DeleteIcon />
                     </IconButton>
                   </CardContent>
                 </Card>

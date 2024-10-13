@@ -30,4 +30,21 @@ export async function getSwipes(req, res) {
   }
 }
 
-export default { swipe, getSwipes };
+export async function deleteSwipe(req, res) {
+  const matchId = req.params.id;
+
+  try {
+      const deletedMatch = await SwipeModel.findByIdAndDelete(matchId);
+
+      if (!deletedMatch) {
+      return res.status(400).json({ message: 'Match not found' });
+      }
+
+      res.status(200).json({ message: 'Match deleted successfully' });
+  } catch (error) {
+      console.error('Error deleting match:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+}
+
+export default { swipe, getSwipes, deleteSwipe};

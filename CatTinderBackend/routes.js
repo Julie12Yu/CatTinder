@@ -1,5 +1,5 @@
 import express from 'express';
-import  {swipe, getSwipes}  from './routes/swipe.js'; 
+import  {swipe, getSwipes, deleteSwipe}  from './routes/swipe.js'; 
 import  searchPetsWithFilters  from './routes/searchPetsWithFilters.js';
 
 const router = express.Router();
@@ -19,5 +19,6 @@ router.post('/searchPetsWithFilters', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+router.delete('/swipes/:id', deleteSwipe);
 
 export default router;
