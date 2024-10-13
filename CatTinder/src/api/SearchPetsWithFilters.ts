@@ -22,7 +22,7 @@ async function searchPetsWithFilters(props: SearchPetsProps): Promise<CatInfo[] 
     if (filters.length <= 1) {
         return "";
     }
-    let filterProcessing = "1 and 2";
+    let filterProcessing = "1";
     for (let i = 2; i <= filters.length; i++) {
         filterProcessing += ` and ${i}`;
     }
