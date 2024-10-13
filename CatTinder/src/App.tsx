@@ -4,7 +4,7 @@ import UserProfile from './components/UserProfile';
 import Login from './components/Auth/Login';
 import UserAuth from './components/Auth/UserAuth';
 import CatPreference from './models/CatPreference';
-import TinderPage from './components/TinderPage';
+import TinderPage from './components/Tinder/TinderPage';
 import SignUp from './components/Auth/SignUp';
 
 const App: React.FC = () => {

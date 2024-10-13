@@ -1,7 +1,7 @@
 import './TinderPage.css';
 import React, { useState } from 'react';
 import TinderDeck from './TinderDeck'; // Assuming you have this component
-import searchPets from '../api/SearchPets';
+import searchPets from '../../api/SearchPets';
 
 const TinderPage: React.FC = () => {
   const [petData, setPetData] = useState({ name: "", img: "", id: "" });
