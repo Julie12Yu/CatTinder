@@ -10,6 +10,7 @@ import SignUp from './components/Auth/SignUp';
 const App: React.FC = () => {
     const [page, setPage] = useState<'login' | 'userProfile' | 'main' | 'signUp'>('login');
     const [preferences, setPreferences] = useState<CatPreference>({});
+    const [failed, setFailed] = useState<boolean>(false);
 
 
     const handleLogin = () => {
@@ -34,14 +35,23 @@ const App: React.FC = () => {
         setPage('main');
     };
 
+    const handleReturnToPreferences = () => {
+        setPage('userProfile');
+    }
+
+    const handleFailedToRetrieve = () => {
+      setPage('userProfile');
+      setFailed(true)
+    }
+
     return (
         <>
             <div>
               {page === 'login' && <Login onLogin={handleLogin}  onLoginS={handleMoveSignUp} />}
               {page === 'signUp' && <SignUp onSignUp={handleSignUp} onSignUpL={onSignUpLogin} />}
-              {page === 'userProfile' && <UserProfile onSavePreferences={handleSavePreferences} />}
-              {page === 'main' && <TinderPage preferences={preferences}/>}
-              <UserAuth/>
+              {page === 'userProfile' && <UserProfile onSavePreferences={handleSavePreferences} preferences={preferences}/>}
+              {page === 'main' && <TinderPage preferences={preferences} failedToRetreive={handleFailedToRetrieve}/>}
+              <UserAuth returnToPreferences={handleReturnToPreferences} displayReturnToPreferences={page === 'main'}/>
             </div>
         </>
     );
