@@ -12,7 +12,8 @@ async function getOrganizationData(orgId) {
   console.log('Request URL:', reqUrl);
 
   const constructAddress = (street, city, state, postalcode) => {
-    return `${street} \n ${city}, ${state} ${postalcode}`;
+    const streetStr = street ? `${street} \n ` : "";
+    return `${streetStr}${city}, ${state} ${postalcode}`;
   }
 
   const getOrgObject = (org) => {

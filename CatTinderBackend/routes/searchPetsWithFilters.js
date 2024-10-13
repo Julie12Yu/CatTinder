@@ -49,7 +49,7 @@ export async function searchPetsWithFilters(props) {
     }
   };
 
-  const reqUrl = `${rescueGroupsAPIURL}/public/animals/search/available/cats/haspic?sort=-animals.updatedDate&limit=${props.limit || 100}&page=${props.page || 1}`;
+  const reqUrl = `${rescueGroupsAPIURL}/public/animals/search/available/cats/haspic?sort=random&limit=${props.limit || 100}&page=${props.page || 1}`;
   console.log('Request URL:', reqUrl);
   console.log('Request Body:', JSON.stringify(requestBody));
 
