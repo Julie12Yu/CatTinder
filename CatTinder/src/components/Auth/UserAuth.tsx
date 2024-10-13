@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
 import { auth } from './firebase.js';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 
 interface UserAuthProps {
+    authUser: User | null;
+    setAuthUser: (user: User | null) => void;
     returnToPreferences: () => void;
     displayReturnToPreferences: boolean;    
 }
 
 const UserAuth: React.FC<UserAuthProps> = (props: UserAuthProps) => {
-    const [authUser, setAuthUser] = useState<User | null>(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setAuthUser(user);
+                props.setAuthUser(user);
                 console.log('User is signed in');
             } else {
-                setAuthUser(null);
+                props.setAuthUser(null);
             }
         });
 
@@ -36,9 +37,9 @@ const UserAuth: React.FC<UserAuthProps> = (props: UserAuthProps) => {
 
     return (
         <div>
-            {authUser 
+            {props.authUser 
                 ? <>
-                    <p>{`Signed In as ${authUser.email}`}</p>
+                    <p>{`Signed In as ${props.authUser.email}`}</p>
                     <button onClick={userSignOut}>Sign Out</button>
                     {props.displayReturnToPreferences && <button onClick={props.returnToPreferences}>Return to Preferences</button>}
                   </> 
