@@ -1,15 +1,15 @@
-import CatPreference from "../models/CatPreference";
+//import CatPreference from "../models/CatPreference";
 import CatInfo from "../models/CatInfo";
 
 const rescueGroupsAPIURL = "https://api.rescuegroups.org/v5";
-
+/*
 interface SearchPetsProps {
   preferences: CatPreference;
   page?: number;
   limit?: number;
-}
+}*/
 
-async function searchPetsWithFilters(props: SearchPetsProps): Promise<CatInfo[] | undefined> {
+async function searchPetsWithFilters(/*props: SearchPetsProps*/): Promise<CatInfo[] | undefined> {
  
 
   /*const requestBody = {
