@@ -7,6 +7,9 @@ interface CatInfo {
     breedString ?: string | undefined;
     color ?: string | undefined;
     summary ?: string | undefined; 
+    distance ?: number | undefined;
+    isDeclawed ?: boolean | undefined;
+    isHouseTrained ?: boolean | undefined;
 }
 export default CatInfo;
 
