@@ -16,14 +16,15 @@ function TinderDeck({ preferences }) {
     const loadCats = async () => {
       setLoading(true);
       try {
-        console.log("SEARCHING NOW")
-        const data = await searchPetsWithFilters({ preferences, page, limit: 10});
-        console.log(JSON.stringify(data));
+        //console.log("SEARCHING NOW")
+        //const data = await searchPetsWithFilters({ preferences, page, limit: 50});
+        const data = await searchPets({ preferences, page, limit: 50});
+        //console.log(JSON.stringify(data));
         if (data) {
-          console.log("CATS CATS CATS BEFORE" + cats);
+          //console.log("CATS CATS CATS BEFORE" + cats);
           await setCats(data);
           
-          console.log("CATS CATS CATS AFTER" + cats);
+          //console.log("CATS CATS CATS AFTER" + cats);
           console.log(cats.length + ", index bef: " + currentIndex);
           await setCurrentIndex(cats.length - 1);
           console.log(cats.length + ", index aft: " + currentIndex);
