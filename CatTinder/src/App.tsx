@@ -6,6 +6,7 @@ import UserAuth from './components/Auth/UserAuth';
 import CatPreference from './models/CatPreference';
 import TinderPage from './components/Tinder/TinderPage';
 import SignUp from './components/Auth/SignUp';
+import searchPetsWithFilters from './api/SearchPetsWithFilters';
 
 const App: React.FC = () => {
     const [page, setPage] = useState<'login' | 'userProfile' | 'main' | 'signUp'>('login');
