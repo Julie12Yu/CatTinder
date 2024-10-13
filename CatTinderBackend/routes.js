@@ -11,8 +11,9 @@ router.post('/searchPetsWithFilters', async (req, res) => {
     const cats = await searchPetsWithFilters(props);
     if (cats.length === 0) {
       res.status(400).json({ error: 'No cats found for the current filter.' });
+    } else {
+      res.status(200).json(cats);
     }
-    res.status(200).json(cats);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
