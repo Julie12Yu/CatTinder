@@ -87,16 +87,16 @@ async function searchPetsWithFilters(props: SearchPetsProps): Promise<CatInfo[] 
 
     return data.data.map((cat: any) => ({
       id: cat.id,
-      name: cat.attributes.name,
-      age: cat.attributes.age,
-      sex: cat.attributes.sex,
+      name: cat.attributes.name || "Unknown",
+      age: cat.attributes.age || "Unknown",
+      sex: cat.attributes.sex || "Unknown",
       imageUrl: cat.attributes.pictureThumbnailUrl || defaultMissingCatPictureURL,
-      breedString: cat.attributes.breedString,
-      color: cat.attributes.color,
-      summary: cat.attributes.description,
-      distance: cat.attributes.distance,
-      isDeclawed: cat.attributes.isDeclawed,
-      isHouseTrained: cat.attributes.isHouseTrained
+      breedString: cat.attributes.breedString || "Unknown",
+      color: cat.attributes.color || "Unknown",
+      summary: cat.attributes.description || "No description.",
+      distance: cat.attributes.distance || undefined,
+      isDeclawed: cat.attributes.isDeclawed || undefined,
+      isHouseTrained: cat.attributes.isHouseTrained || undefined
     }));
   } catch (error) {
     console.error('Error loading cats:', error);

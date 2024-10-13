@@ -6,11 +6,9 @@ import UserAuth from './components/Auth/UserAuth';
 import CatPreference from './models/CatPreference';
 import TinderPage from './components/Tinder/TinderPage';
 import SignUp from './components/Auth/SignUp';
-import searchPetsWithFilters from './api/SearchPetsWithFilters';
-import searchPets from './api/SearchPets';
 
 const App: React.FC = () => {
-    const [page, setPage] = useState<'login' | 'userProfile' | 'main' | 'signUp'>('userProfile');
+    const [page, setPage] = useState<'login' | 'userProfile' | 'main' | 'signUp'>('login');
     const [preferences, setPreferences] = useState<CatPreference>({});
 
 
@@ -42,7 +40,7 @@ const App: React.FC = () => {
               {page === 'login' && <Login onLogin={handleLogin}  onLoginS={handleMoveSignUp} />}
               {page === 'signUp' && <SignUp onSignUp={handleSignUp} onSignUpL={onSignUpLogin} />}
               {page === 'userProfile' && <UserProfile onSavePreferences={handleSavePreferences} />}
-              {page === 'main' && <TinderPage />}
+              {page === 'main' && <TinderPage preferences={preferences}/>}
               <UserAuth/>
             </div>
         </>

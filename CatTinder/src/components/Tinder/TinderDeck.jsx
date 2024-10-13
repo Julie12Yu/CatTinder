@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import TinderCard from "react-tinder-card";
-import searchPets from "../api/SearchPets";
-import searchPetsWithFilters from "../api/SearchPetsWithFilters";
+import searchPets from "../../api/SearchPets";
+import searchPetsWithFilters from "../../api/SearchPetsWithFilters";
 
 function TinderDeck({ preferences }) {
   const [cats, setCats] = useState([]);
