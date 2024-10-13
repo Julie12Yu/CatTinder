@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const swipeSchema = new mongoose.Schema({
   userId: String,
@@ -9,4 +9,4 @@ const swipeSchema = new mongoose.Schema({
 
 const SwipeModel = mongoose.model('Swipe', swipeSchema);
 
-module.exports = SwipeModel;
+export default SwipeModel;

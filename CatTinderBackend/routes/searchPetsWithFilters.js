@@ -1,16 +1,9 @@
-import CatPreference from "../models/CatPreference.ts";
-import CatInfo from "../models/CatInfo.ts";
+
 
 const rescueGroupsAPIURL = "https://api.rescuegroups.org/v5";
 
-interface SearchPetsProps {
-  preferences: CatPreference;
-  page?: number;
-  limit?: number;
-}
-
-export async function searchPetsWithFilters(props: SearchPetsProps): Promise<CatInfo[] | undefined> {
-  const addFilter = (filters: unknown[], fieldName: string, operation: string, criteria: unknown) => {
+export async function searchPetsWithFilters(props) {
+  const addFilter = (filters, fieldName, operation, criteria) => {
     filters.push({
       fieldName: "animals." + fieldName,
       operation: operation,
@@ -18,7 +11,7 @@ export async function searchPetsWithFilters(props: SearchPetsProps): Promise<Cat
     });
   }
 
-  const constructFilterProcessing = (filters: unknown[]) => {
+  const constructFilterProcessing = (filters) => {
     if (filters.length <= 1) {
         return "";
     }
@@ -32,15 +25,13 @@ export async function searchPetsWithFilters(props: SearchPetsProps): Promise<Cat
   const preferences = props.preferences;
   const defaultMissingCatPictureURL = "https://cdn.discordapp.com/attachments/786109228267601920/1294837546911535134/a8117bbcdb409915a733bec10b3ad118.png?ex=670c76f0&is=670b2570&hm=da91d1ff4fb5c18909eb5078c9ce34f1ded7f961d344b7c7ab85486e8e7d1d58&";
 
-  const filters: unknown[] = []
+  const filters = []
 
   if (preferences.sex !== undefined && preferences.sex !== "Any") {
-    //console.log("Gender:" + preferences.sex);
     addFilter(filters, "sex", "equals", preferences.sex)
   } 
 
   if (preferences.ageGroup !== undefined && preferences.ageGroup !== "Any") {
-    //console.log("Age:" + preferences.ageLowerBound) + "-" + preferences.ageUpperBound;
     addFilter(filters, "ageGroup", "equals", preferences.ageGroup)
   } 
 
@@ -80,12 +71,11 @@ export async function searchPetsWithFilters(props: SearchPetsProps): Promise<Cat
     const data = await response.json();
     console.log('Response Data:', data);
 
-    // Assuming the response data structure contains an array of cats
     if (!data || !data.data || data.data.length === 0) { 
         return [];
     }
 
-    return data.data.map((cat: any) => ({
+    return data.data.map((cat) => ({
       id: cat.id,
       name: cat.attributes.name || "Unknown",
       age: cat.attributes.age || "Unknown",
