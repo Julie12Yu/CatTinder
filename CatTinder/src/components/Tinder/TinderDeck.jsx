@@ -3,6 +3,8 @@ import CatProfile from "../CatProfile";
 import TinderCard from "react-tinder-card";
 import searchPets from "../../api/SearchPets";
 import CircularProgress from "@mui/material/CircularProgress";
+import searchPetsWithFilters from "../../api/SearchPetsWithFilters";
+import CircularProgress from '@mui/material/CircularProgress';
 import { API_URL } from "../Auth/config";
 import { auth } from "../Auth/firebase";
 
@@ -58,6 +60,7 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
           console.log(cats.length + ", index bef: " + currentIndex);
           await setCurrentIndex(cats.length - 1);
           console.log(cats.length + ", index aft: " + currentIndex);
+          
         } else {
           throw new Error("No data returned");
         }
@@ -85,6 +88,7 @@ function TinderDeck({ authUser, setAuthUser, preferences, failedToRetreive }) {
   };
 
   const canGoBack = currentIndex < cats.length - 1;
+
   const canSwipe = currentIndex >= 0;
 
   const swiped = (direction, nameToDelete, index) => {
