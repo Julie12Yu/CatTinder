@@ -14,11 +14,23 @@ const CatProfile: React.FC<CatProfileProps> = ({ cat, isOpen, onClose }) => {
     <div className="popup">
       <div className="popup_inner">
         <button className="close-btn" onClick={onClose}>close</button>
-        <h1>{cat.name}</h1> 
+        <h2>{cat.name}</h2> 
         <p>Age: {cat.age}</p>
         <p>Sex: {cat.sex}</p>
         <p>Breed: {cat.breedString}</p>
         <p>{cat.summary}</p>
+        {cat.org ? (
+          <>
+            <h2>Organization Info</h2>
+            <p>Name: {cat.org.name || 'null'}</p>
+            <p>Address: {cat.org.orgAddress || 'null'}</p>
+            <p>Phone: {cat.org.orgPhone || 'null'}</p>
+            <p>Email: {cat.org.orgEmail || 'null'}</p>
+            <p>URL: {cat.org.orgUrl || 'null'}</p>
+          </>
+        ) : (
+          <p>Organization Info: null</p>
+        )}
       </div>
     </div>
   );
